@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class Main {
+public class WeatherForecastService {
     public static void main(String[] args) {
 
-        var context = SpringApplication.run(Main.class, args);
+        var context = SpringApplication.run(WeatherForecastService.class, args);
 
         context.getBean("initBot", InitBot.class).start();
 
