@@ -38,31 +38,19 @@ public class LocationMessageHandler implements MessageHandler {
     @Override
     public String handle(Message message) {
         if (message.hasLocation()) {
-            String userLon = message.getLocation().getLongitude().toString();
             String userLat = message.getLocation().getLatitude().toString();
-            logger.info("handle() - trace: location: longitude = {}, latitude = {}", userLon, userLat);
+            String userLon = message.getLocation().getLongitude().toString();
+
+            logger.info("handle() - trace: location: latitude = {}, longitude = {}", userLat, userLon);
 
             weatherServices.stream()
                     .map(weatherService -> weatherService.getWeatherByCoords(userLat, userLon).
                             subscribeOn(Schedulers.boundedElastic()).
                             subscribe(s -> sendMessage(s, message, weatherService.getParser())))
                     .collect(Collectors.toList());
- /*
-            weatherOpenMapService.getWeatherByCoords(userLat, userLon).
-                     subscribeOn(Schedulers.boundedElastic()).
-                     subscribe(s -> sendMessage(s, message, weatherOpenMapParser));
-//            System.out.println("weatherJson: \n" + weatherJsonOMP+"\n\n");
 
-            weatherYandexService.getWeatherByCoords(userLat, userLon).
-                    subscribeOn(Schedulers.boundedElastic()).
-                    subscribe(s -> sendMessage(s, message, weatherYandexParser));
-//            System.out.println("weatherJsonYandex: \n" + weatherJsonYa+"\n\n");
-*/
             return "Получил координаты: "+ userLat+ ", " + userLon;
-
-
         }
-
         return StringUtils.EMPTY;
     }
 
